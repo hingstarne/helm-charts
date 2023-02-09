@@ -14,13 +14,25 @@ jobs:
         with:
           fetch-depth: 0
 
+      - uses: fregante/setup-git-user@v1
+
+      - name: Install Helm
+        uses: azure/setup-helm@v1
+        with:
+          version: v3.11.0
+
+      - name: Run chart-releaser
+        uses: helm/chart-releaser-action@v1.5.0
+        env:
+          CR_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+
       - name: Configure Git
         run: |
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
       - name: Helm Chart Docs Github Pages
-        uses: omegion/helm-charts-docs@v0.16
+        uses: omegion/helm-charts-docs@v0.15
         with:
           branch: gh_pages
           helmRepository: töflur
