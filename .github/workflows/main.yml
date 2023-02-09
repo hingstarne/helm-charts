@@ -20,7 +20,7 @@ jobs:
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
       - name: Helm Chart Docs Github Pages
-        uses: omegion/helm-charts-docs@v0.15
+        uses: omegion/helm-charts-docs@v0.16
         with:
           branch: gh_pages
           helmRepository: töflur
