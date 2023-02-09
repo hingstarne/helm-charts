@@ -7,34 +7,30 @@ on:
 
 jobs:
   release:
+    # depending on default permission settings for your org (contents being read-only or read-write for workloads), you will have to add permissions
+    # see: https://docs.github.com/en/actions/security-guides/automatic-token-authentication#modifying-the-permissions-for-the-github_token
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
-
-      - uses: fregante/setup-git-user@v1
-
-      - name: Install Helm
-        uses: azure/setup-helm@v1
-        with:
-          version: v3.11.0
-
-      - name: Run chart-releaser
-        uses: helm/chart-releaser-action@v1.5.0
-        env:
-          CR_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
 
       - name: Configure Git
         run: |
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
-      - name: Helm Chart Docs Github Pages
-        uses: omegion/helm-charts-docs@v0.15
+      - name: Install Helm
+        uses: azure/setup-helm@v3
+
+      - name: Run chart-releaser
+        uses: helm/chart-releaser-action@v1.5.0
         with:
-          branch: gh_pages
-          helmRepository: töflur
-          helmRepositoryUrl: https://charts.hingst.it
-          token: ${{ secrets.GITHUB_TOKEN }}
+          charts_dir: charts
+          config: cr.yaml
+          charts_repo_url: https://charts.hingst.it
+        env:
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
