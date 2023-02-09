@@ -1,0 +1,28 @@
+name: Release Charts
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+- name: Helm Chart Docs Github Pages
+  uses: omegion/helm-charts-docs@v0.15
+  with:
+    branch: gh_pages
+    helmRepository: töflur
+    helmRepositoryUrl: https://charts.hingst.it
+    token: ${{ secrets.GITHUB_TOKEN }}
